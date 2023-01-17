@@ -11,6 +11,8 @@ import (
 // FWMCircuit defines the four-way matching circuit
 type FWMCircuit struct {
 	// statements
+	G                   twistededwards.Point `gnark:"g,public"`
+	H                   twistededwards.Point `gnark:"h,public"`
 	Commitment1         twistededwards.Point `gnark:",public"`
 	Commitment2         twistededwards.Point `gnark:",public"`
 	Commitment3         twistededwards.Point `gnark:",public"`
@@ -24,19 +26,17 @@ type FWMCircuit struct {
 	Root3               frontend.Variable    `gnark:",public"`
 	Root4               frontend.Variable    `gnark:",public"`
 	// witnesses
-	G              twistededwards.Point `gnark:"g"`
-	H              twistededwards.Point `gnark:"h"`
-	Counter        frontend.Variable    `gnark:"counter"`
-	Aux1           frontend.Variable    `gnark:"aux1"`
-	Aux2           frontend.Variable    `gnark:"aux2"`
-	Aux3           frontend.Variable    `gnark:"aux3"`
-	Aux4           frontend.Variable    `gnark:"aux4"`
-	Amount1        frontend.Variable    `gnark:"amount1"`
-	Amount4        frontend.Variable    `gnark:"amount4"`
-	Timestamp1     frontend.Variable    `gnark:"timestamp1"`
-	Timestamp2     frontend.Variable    `gnark:"timestamp2"`
-	Timestamp3     frontend.Variable    `gnark:"timestamp3"`
-	Timestamp4     frontend.Variable    `gnark:"timestamp4"`
+	Counter        frontend.Variable `gnark:"counter"`
+	Aux1           frontend.Variable `gnark:"aux1"`
+	Aux2           frontend.Variable `gnark:"aux2"`
+	Aux3           frontend.Variable `gnark:"aux3"`
+	Aux4           frontend.Variable `gnark:"aux4"`
+	Amount1        frontend.Variable `gnark:"amount1"`
+	Amount4        frontend.Variable `gnark:"amount4"`
+	Timestamp1     frontend.Variable `gnark:"timestamp1"`
+	Timestamp2     frontend.Variable `gnark:"timestamp2"`
+	Timestamp3     frontend.Variable `gnark:"timestamp3"`
+	Timestamp4     frontend.Variable `gnark:"timestamp4"`
 	Path1, Helper1 []frontend.Variable
 	Path2, Helper2 []frontend.Variable
 	Path3, Helper3 []frontend.Variable

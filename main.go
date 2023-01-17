@@ -4,6 +4,7 @@ package main
 import (
 	"bytes"
 	"crypto/rand"
+	"encoding/json"
 	"fmt"
 	"math/big"
 	"time"
@@ -70,8 +71,9 @@ func main() {
 	assignCommitAux3, commitAux3 := assignCommit(aux3, timestamp3, counter, g, h)
 	assignCommitAux4, commitAux4 := assignCommit(aux4, timestamp4, counter, g, h)
 
+	const bufLen = 1000000
 	var buf bytes.Buffer
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < bufLen; i++ {
 		if i == 100 {
 			buf.Write(commitAux1)
 		} else if i == 200 {
@@ -92,7 +94,7 @@ func main() {
 	root1, proof1, numLeaves, err := merkletree.BuildReaderProof(&buf, mimc.NewMiMC(), 32, 100)
 	proofHelper1 := merkle.GenerateProofHelper(proof1, 100, numLeaves)
 	buf.Reset()
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < bufLen; i++ {
 		if i == 100 {
 			buf.Write(commitAux1)
 		} else if i == 200 {
@@ -113,7 +115,7 @@ func main() {
 	root2, proof2, numLeaves, err := merkletree.BuildReaderProof(&buf, mimc.NewMiMC(), 32, 200)
 	proofHelper2 := merkle.GenerateProofHelper(proof2, 200, numLeaves)
 	buf.Reset()
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < bufLen; i++ {
 		if i == 100 {
 			buf.Write(commitAux1)
 		} else if i == 200 {
@@ -134,7 +136,7 @@ func main() {
 	root3, proof3, numLeaves, err := merkletree.BuildReaderProof(&buf, mimc.NewMiMC(), 32, 300)
 	proofHelper3 := merkle.GenerateProofHelper(proof3, 300, numLeaves)
 	buf.Reset()
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < bufLen; i++ {
 		if i == 100 {
 			buf.Write(commitAux1)
 		} else if i == 200 {
@@ -235,7 +237,6 @@ func main() {
 	for i := range proofHelper4 {
 		assignment.Helper4[i] = proofHelper4[i]
 	}
-	fmt.Println("test hash", fwmcircuit.MiMCHashTimestampCounter(timestamp1, counter).String())
 	witness, err := frontend.NewWitness(&assignment, ecc.BN254)
 	handleErr(err)
 	publicWitness, _ := witness.Public()
@@ -246,6 +247,10 @@ func main() {
 	err = groth16.Verify(proof, vk, publicWitness)
 	handleErr(err)
 
+	// measure the proof size
+	proofBytes, err := json.Marshal(proof)
+	handleErr(err)
+	fmt.Printf("Proof size: %d bytes", len(proofBytes))
 }
 
 func assignCommit(num, timestamp, counter int64, g, h *twistededwards.PointAffine) (twistededwards2.Point, []byte) {

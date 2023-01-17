@@ -3,11 +3,8 @@ module github.com/auti-project/four-way-matching
 go 1.19
 
 require (
-	filippo.io/edwards25519 v1.0.0
-	github.com/auti-project/auti-core v0.1.20
 	github.com/consensys/gnark v0.7.1
 	github.com/consensys/gnark-crypto v0.7.0
-	github.com/xuperchain/crypto v0.0.0-20211224062819-eca101aeda3f
 )
 
 require (
